@@ -1,0 +1,6 @@
+tools/armips.exe
+*.gba
+*.sna
+*.sa*
+*.bps
+*.zip
