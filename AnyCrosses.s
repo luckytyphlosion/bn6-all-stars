@@ -4,6 +4,9 @@
 // By Prof. 9
 // Made for ARMIPS assembler v0.7c
 
+GREGAR equ 0
+FALZAR equ 1
+
 	.gba
 	.include ver
 
@@ -18,11 +21,12 @@ set2flag    equ 0
 // sub_8029EF8 - initializes active cross list
 
 // 86e5d50 - gregar cross windows
+// 86e73d0 - gregar cross window palettes
 	.align 2
 crosses:
 	// Cross1,Cross2,Cross3,Cross4,Cross5,Beast
-	.byte 0x06,0x07,0x08,0x09,0x0A,0x0C
 	.byte 0x01,0x06,0x03,0x04,0x05,0x0B
+	.byte 0x06,0x07,0x08,0x09,0x0A,0x0C
 
 	.align 2
 windowmugs:
@@ -105,15 +109,42 @@ CheckCrossUsedUp:
 	and	r3, r0
 	pop	{pc}
 
+// free regs: r1, r2, r3, r4, r5
 PatchCrossWindowGfxPtr:
-	ldr	r3, =windowmugs
-	bl getptr
+	bl GetCrossList
+	// r7 = which cross mug
+	ldrb r1, [r1,r7]
+	sub r1, 1
+	ldr r2, =GregarVersionCrossWindows
+	cmp r1, 5
+	blt @@isGregarCross
+	sub r1, 5
+	ldr r2, =FalzarVersionCrossWindows
+@@isGregarCross:
+	add r0, r0, r1 // add unselected offset
+	ldr r1, =0x240 // cross window size
+	mul r0, r1
+	add r0, r2, r0
 	ldr	r1, =0x8029DAD
 	bx r1
 
 PatchCrossSelectedPalette:
-	ldr	r3, =windowpals
-	bl getptr
+	push {r3}
+	sub r0, r0, r2 // temporarily reverse selected palette operation
+	bl GetCrossList
+	ldrb r1, [r1,r0]
+	sub r1, 1
+	ldr r3, =GregarVersionCrossWindowPalettes
+	cmp r1, 5
+	blt @@isGregarCross
+	sub r1, 5
+	ldr r3, =FalzarVersionCrossWindowPalettes
+@@isGregarCross:
+	add r1, r1, r2 // add selected offset
+	mov r0, 0x20
+	mul r0, r1
+	add r0, r3, r0
+	pop {r3}
 	ldr	r1, =0x8029EB7
 	bx r1
 
@@ -166,7 +197,7 @@ PatchPlayBeastSoundEffect:
 
 getptr:	 // input: r3 = pointer list start, output: r0 = required pointer
 	push {r0,r1,r3,lr}
-	bl GetCrossList
+	mov r0, 0 // bl GetCrossList
 	lsl	r0, r0, 2
 	ldr	r3, [r3,r0]
 	pop	{r0,r1}
@@ -175,7 +206,7 @@ getptr:	 // input: r3 = pointer list start, output: r0 = required pointer
 
 getbst: // input: r2 = pointer number * 4, output: r0 = beastbutton
 	push {r1,lr}
-	bl GetCrossList
+	mov r0, 0 // bl GetCrossList
 	lsl	r0, r0, 4
 	ldr	r1, =beastbutton
 	add	r0, r1, r0
@@ -183,56 +214,17 @@ getbst: // input: r2 = pointer number * 4, output: r0 = beastbutton
 	pop	{r1,pc}
 
 GetCrossList: // output: r0 = set value, r1 = set offset
-	.if (set2flag != 0) | (NCPeffect != 0)
-	push {r3,lr}
-	.endif
-
-checkflag:
-	.if set2flag != 0
-	mov	r0, set2flag >> 8
-	mov	r1, set2flag & 0xFF
-	mov	r3, pc
-	add	r3, 7
-	mov	lr, r3
-	ldr	r3, =0x802F165
-	bx r3
-	beq	checkNCPeffect
-	mov	r0,1h
-	b GetCrossListend
-	.endif
-
-checkNCPeffect:
-	.if NCPeffect != 0
-	mov	r3, pc
-	add	r3, 7
-	mov	lr, r3
-	ldr	r3, =0x80010B7
-	bx r3
-	mov	r1, NCPeffect
-	ldr	r3, =0x80137B7
-	mov	lr, pc
-	bx r3
-	.else
-	mov	r0, 0
-	.endif
-
-GetCrossListend:
-	.if (set2flag != 0) | (NCPeffect != 0)
-	mov	r1, 6
-	mul	r1, r0
-	.endif
-
-	ldr	r3, =crosses
-
-	.if (set2flag != 0) | (NCPeffect != 0)
-	add	r1, r1, r3
-	pop	{r3,pc}
-	.else
-	mov r1, r3
+	ldr	r1, =crosses
 	bx lr
-	.endif
-
 	.pool
+
+	.align 2
+OppositeVersionCrossWindows:
+	.import OTHER_VERSION_ROM, OTHER_VERSION_CROSS_WINDOWS_FILE_ADDR, 0x240 * 10
+
+	.align 2
+OppositeVersionCrossWindowPalettes:
+	.import OTHER_VERSION_ROM, OTHER_VERSION_CROSS_WINDOW_PALETTES_FILE_ADDR, 0x20 * 10
 
 	.org 0x0802A086 + VERSION * 4
 Hook_OverrideCrossChosenInMenu:
@@ -279,14 +271,14 @@ Hook_OverrideCrossChosenInMenu:
 	.pool
 
 // sub_8029D94
-	.org 0x08029DA8
+	.org 0x08029DA2
 	ldr	r1, =PatchCrossWindowGfxPtr|1
 	bx r1
 	.org 0x08029DD8
 	.pool
 
 // sub_8029EAC
-	.org 0x08029EB2
+	.org 0x08029EAE
 	ldr	r1, =PatchCrossSelectedPalette|1
 	bx r1
 	.org 0x08029EC0
