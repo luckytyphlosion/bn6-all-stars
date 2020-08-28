@@ -83,19 +83,19 @@ PatchResultingBeastForm:
 @@isCrossBeast:
 	pop	pc
 
-extra4:
-	bl extra4b
+PatchCountRemainingCrosses:
+	bl CheckCrossUsedUp
 	ldr	r1,=0x8029EE9+VERSION*2
 	bx r1
 
-extra4a:
+PatchActiveCrossList:
 	ldr	r3,=0x20349A0
-	bl extra4b
+	bl CheckCrossUsedUp
 	ldr	r1,=0x8029F17+VERSION*4
 	bx r1
 
-extra4b:
-	push lr
+CheckCrossUsedUp:
+	push {lr}
 	bl GetCrossList
 	ldrb r1, [r1,r4]
 	sub	r1, 1
@@ -103,54 +103,54 @@ extra4b:
 	lsl	r0, r1
 	ldr	r3, [r3]
 	and	r3, r0
-	pop	pc
+	pop	{pc}
 
-extra5:
+PatchCrossWindowGfxPtr:
 	ldr	r3, =windowmugs
 	bl getptr
 	ldr	r1, =0x8029DAD
 	bx r1
 
-extra6:
+PatchCrossSelectedPalette:
 	ldr	r3, =windowpals
 	bl getptr
 	ldr	r1, =0x8029EB7
 	bx r1
 
-extra7:
-	push r0
+PatchGetCrossDescription:
+	push {r0}
 	bl GetCrossList
 	ldrb r0, [r5,0x1b]
 	add	r2, r2, r0
 	ldrb r0, [r5,r2]
 	ldrb r1, [r1,r0]
 	sub	r1, 1
-	pop	r0
+	pop	{r0}
 	ldr	r2, =0x8028B55
 	bx r2
 
-extra8:
+PatchLoadBeastIcon:
 	push lr
 	mov	r2, 0
 	bl getbst
 	ldr	r2, =0x80282B3
 	bx r2
 
-extra9:
+PatchLoadBeastChipImage:
 	mov	r2, 4
 	bl getbst
 	ldr	r1, =0x6009560
 	ldr	r2, =0x8028727
 	bx r2
 
-extra10:
+PatchLoadBeastChipPalette:
 	mov	r2, 8
 	bl getbst
 	add	r0, r0, r1
 	ldr	r1, =0x802873D
 	bx r1
 
-extra11:
+PatchPlayBeastSoundEffect:
 	mov	r2, pc
 	add	r2, 7h
 	mov	lr, r2
@@ -266,51 +266,60 @@ Hook_OverrideCrossChosenInMenu:
 	b 0x8029368
 	.pool
 
+// sub_8029EC8
 	.org 0x08029EE0
-	ldr	r0, =extra4|1
+	ldr	r0, =PatchCountRemainingCrosses|1
 	bx r0
 	.pool
 
+// sub_8029EF8
 	.org 0x08029F0C + VERSION * 2
-	ldr	r0, =extra4a|1
+	ldr	r0, =PatchActiveCrossList|1
 	bx r0
 	.pool
 
+// sub_8029D94
 	.org 0x08029DA8
-	ldr	r1,=extra5|1
+	ldr	r1, =PatchCrossWindowGfxPtr|1
 	bx r1
 	.org 0x08029DD8
 	.pool
 
+// sub_8029EAC
 	.org 0x08029EB2
-	ldr	r1,=extra6|1
+	ldr	r1, =PatchCrossSelectedPalette|1
 	bx r1
 	.org 0x08029EC0
 	.pool
 
+// sub_8028A78
 	.org 0x08028B4A
 	ldr	r2, [0x8028B6C]
-	ldr	r1,=extra7|1b
+	ldr	r1, =PatchGetCrossDescription|1
 	bx r1
 	.pool
 
+// sub_80282AE (called from jumptable in sub_8028250)
 	.org 0x08028378
-	.word extra8|1b
+	.word PatchLoadBeastIcon|1b
 
+// sub_802871C
 	.org 0x08028722
-	ldr	r0, =extra9|1
+	ldr	r0, =PatchLoadBeastChipImage|1
 	bx r0
 	.org 0x0802874C
 	.pool
 
+// sub_802871C
 	.org 0x08028738
-	ldr	r0, =extra10|1
+	ldr	r0, =PatchLoadBeastChipPalette|1
 	bx r0
 	.org 0x08028750
 	.pool
 
+// sub_802774C
 	.org 0x0802775E
-	ldr	r2,=extra11|1
+	ldr	r2,=PatchPlayBeastSoundEffect|1
 	bx r2
 	.org 0x08027764
 	.pool
