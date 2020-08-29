@@ -13,31 +13,33 @@ FALZAR equ 1
 NCPeffect   equ 0
 set2flag    equ 0
 
+	.definelabel eCustScreenMenu, 0x20364c0
+	.definelabel GetBattleNaviStatsAddr, 0x8013682
+
 	.open INPUT_ROM, "bn6f-all-stars.gba", 0x8000000
 
 	.org fspace
+
+// normal, anger, tired, full synchro, critical
+// spout, tomahawk, tengu, ground, dust
+// tired spout, tired tomahawk, tired tengu, tired ground, tired dust
+// spoutbeast, tomahawkbeast, tengubeast, groundbeast, dustbeast
+// falzarbeast, full synchro falzarbeast, falzarbeast over
 
 // 2036510 - active crosses
 // sub_8029EF8 - initializes active cross list
 
 // 86e5d50 - gregar cross windows
 // 86e73d0 - gregar cross window palettes
+
+// 30016d0 - mugshot palette
 	.align 2
 crosses:
 	// Cross1,Cross2,Cross3,Cross4,Cross5,Beast
-	.byte 0x01,0x06,0x03,0x04,0x05,0x0B
+	.byte 0x01,0x06,0x03,0x04,0x05,0x0C
 	.byte 0x06,0x07,0x08,0x09,0x0A,0x0C
 
 	.align 2
-windowmugs:
-	// selection window button graphics
-	.word 0x086E7DCC
-	.word 0x086E7DCC
-
-windowpals:
-	// selection window button palettes
-	.word 0x086E944C
-	.word 0x086E944C
 
 beastbutton:
 	// Button graphics, Chip Image, Chip Palette, Sound Effect
@@ -148,6 +150,109 @@ PatchCrossSelectedPalette:
 	ldr	r1, =0x8029EB7
 	bx r1
 
+// 0x20352cc chosen cross?
+// hook at 0x801cbbe
+// free regs: r0, r1, r2
+// other struct (r5): 0x2035280
+
+// normal -> beast
+// normal -> cross
+// cross -> beast
+// beast -> cross
+
+// r0 - emotion window index
+// r1 - ???
+// r2 - free
+// r3 - free
+// r4 - emotion window index copy
+// r5 - eStruct2035280
+// r6 - r1 copy
+// r7 - used
+PatchEmotionMugGfx:
+	// first check if it's a non-version exclusive mug
+	mov r4, r0
+	mov r6, r1
+	mov r1, VERSION
+	cmp r4, 5
+	blt @@gotVersion
+	// check if the mug has changed because we selected a cross in the cust menu
+	mov r0, 0x4c
+	ldrb r0, [r5,r0]
+	cmp r0, 0
+	// jump if the player didn't choose to transform
+	beq @@getVersionFromTransformation
+	// check if beast transformation was chosen
+	ldr r2, =eCustScreenMenu
+	ldrb r3, [r2,0x17]
+	tst r3, r3
+	bne @@getVersionFromTransformation
+	// check if cross transformation was chosen (should always be true)
+	ldrb r3, [r2,0x19]
+	tst r3, r3
+	beq @@getVersionFromTransformation
+	// get actual chosen
+	bl GetCrossList
+	ldrb r0, [r2,0x1a]
+	ldrb r0, [r1,r0]
+	mov r1, GREGAR
+	cmp r0, 6
+	blt @@gotVersion
+	mov r1, FALZAR
+	b @@gotVersion
+@@getVersionFromTransformation:
+	ldr r3, [r5,0x48] // battle object ptr
+	ldrb r0, [r3,0x16] // alliance field
+	ldr r1, =GetBattleNaviStatsAddr|1
+	mov lr, pc
+	bx r1
+	mov r2, 0x2c // transformation
+	ldrb r2, [r0,r2]
+
+	mov r1, VERSION
+	cmp r2, 0 // baseman
+	beq @@gotVersion
+
+	mov r1, GREGAR
+	cmp r2, 6 // [heat, charge]
+	blt @@gotVersion
+
+	mov r1, FALZAR
+	cmp r2, 11 // [spout, dust]
+	blt @@gotVersion
+	cmp r2, 12 // falzar beast
+	beq @@gotVersion
+
+	mov r1, GREGAR
+	cmp r2, 11 // gregar beast
+	beq @@gotVersion
+	cmp r2, 18 // [heatbeast, chargebeast]
+	blt @@gotVersion
+
+	cmp r2, 23 // [spoutbeast, dustbeast]
+	mov r1, FALZAR
+	blt @@gotVersion
+
+	cmp r2, 24 // falzar beastover
+	beq @@gotVersion
+	mov r1, GREGAR
+
+@@gotVersion:
+	ldr r0, =GregarVersionEmotionMugsPointerTable
+	ldr r3, =GregarVersionEmotionMugPalettes
+	cmp r1, GREGAR
+	beq @@gotPointerTable
+	ldr r0, =FalzarVersionEmotionMugsPointerTable
+	ldr r3, =FalzarVersionEmotionMugPalettes
+@@gotPointerTable:
+	// get emotion mug pointer
+	lsl r2, r4, 2
+	ldr r0, [r0,r2]
+	// get emotion mug palette pointer
+	lsl r4, r4, 5
+	add r4, r3, r4
+	ldr r1, =0x801cbc8|1
+	bx r1
+
 PatchGetCrossDescription:
 	push {r0}
 	bl GetCrossList
@@ -226,6 +331,80 @@ OppositeVersionCrossWindows:
 OppositeVersionCrossWindowPalettes:
 	.import OTHER_VERSION_ROM, OTHER_VERSION_CROSS_WINDOW_PALETTES_FILE_ADDR, 0x20 * 10
 
+	.macro import_mug_ptr, index
+	.word readu32(OTHER_VERSION_ROM, OTHER_VERSION_EMOTION_MUG_POINTER_TABLE_ADDR + index * 4)
+	.endmacro
+
+	.macro import_mug, index
+	.import OTHER_VERSION_ROM, readu32(OTHER_VERSION_ROM, OTHER_VERSION_EMOTION_MUG_POINTER_TABLE_ADDR + (index + 5) * 4) - 0x8000000, 0x100
+	.endmacro
+
+	.align 2
+OppositeVersionEmotionMugsPointerTable:
+	import_mug_ptr 0
+	import_mug_ptr 1
+	import_mug_ptr 2
+	import_mug_ptr 3
+	import_mug_ptr 4
+	.word Cross1EmotionMug
+	.word Cross2EmotionMug
+	.word Cross3EmotionMug
+	.word Cross4EmotionMug
+	.word Cross5EmotionMug
+	.word Cross1TiredEmotionMug
+	.word Cross2TiredEmotionMug
+	.word Cross3TiredEmotionMug
+	.word Cross4TiredEmotionMug
+	.word Cross5TiredEmotionMug
+	.word Cross1EmotionMug
+	.word Cross2EmotionMug
+	.word Cross3EmotionMug
+	.word Cross4EmotionMug
+	.word Cross5EmotionMug
+	.word NullBeastEmotionMug
+	.word NullBeastEmotionMug
+	.word BeastOverEmotionMug
+
+OppositeVersionEmotionMugPalettes:
+	.import OTHER_VERSION_ROM, OTHER_VERSION_EMOTION_MUG_PALETTES_ADDR, 0x20 * 23
+
+	.align 2
+Cross1EmotionMug:
+	import_mug 0
+
+Cross2EmotionMug:
+	import_mug 1
+
+Cross3EmotionMug:
+	import_mug 2
+
+Cross4EmotionMug:
+	import_mug 3
+
+Cross5EmotionMug:
+	import_mug 4
+
+Cross1TiredEmotionMug:
+	import_mug 5
+
+Cross2TiredEmotionMug:
+	import_mug 6
+
+Cross3TiredEmotionMug:
+	import_mug 7
+
+Cross4TiredEmotionMug:
+	import_mug 8
+
+Cross5TiredEmotionMug:
+	import_mug 9
+
+NullBeastEmotionMug:
+	import_mug 15
+
+BeastOverEmotionMug:
+	import_mug 17
+	
 	.org 0x0802A086 + VERSION * 4
 Hook_OverrideCrossChosenInMenu:
 	ldr	r6, =OverrideCrossChosenInMenu|1
@@ -283,6 +462,18 @@ Hook_OverrideCrossChosenInMenu:
 	bx r1
 	.org 0x08029EC0
 	.pool
+
+// sub_801CB38
+	.org 0x801CBBE
+	ldr r2, =PatchEmotionMugGfx|1
+	bx r2
+	.pool
+
+// sub_801CB38
+	.org 0x801CC24
+	nop
+	nop
+	mov r0, r4
 
 // sub_8028A78
 	.org 0x08028B4A
