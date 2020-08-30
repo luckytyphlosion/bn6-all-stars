@@ -5,3 +5,4 @@ tools/armips.exe
 *.bps
 *.zip
 *.sym
+*.txt

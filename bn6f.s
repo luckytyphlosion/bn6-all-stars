@@ -27,3 +27,21 @@ OTHER_VERSION_EMOTION_MUG_PALETTES_ADDR equ 0x72d050
 
 fspace             equ 0x087FE36C
 VERSION            equ FALZAR // 0 = Gregar, 1 = Falzar
+
+// hooks
+	.definelabel sub_8015952, 0x8015952
+	.definelabel PatchCountRemainingCrosses_Return, 0x8029eea
+	.definelabel PatchActiveCrossList_Return, 0x8029f1a
+	.definelabel PatchCrossWindowGfxPtr_Return, 0x8029dac
+	.definelabel PatchCrossSelectedPalette_Return, 0x8029EB6
+	.definelabel PatchEmotionMugGfx_Return, 0x801cbc8
+	.definelabel PatchGetCrossDescription_Return, 0x8028B54
+	.definelabel PatchLoadBeastIcon_Return, 0x80282B2
+	.definelabel PatchLoadBeastChipImage_Return, 0x8028726
+	.definelabel PatchLoadBeastChipPalette_Return, 0x802873C
+	.definelabel sub_80302B6, 0x80302B6
+	.definelabel PlaySoundEffect, 0x80005CC
+	.definelabel PatchPlayBeastSoundEffect_Return, 0x802776A
+
+	.definelabel Hook_OverrideCrossChosenInMenu, 0x802A08A
+	.definelabel HookPool_OverrideCrossChosenInMenu, 0x0802A0E0

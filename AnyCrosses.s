@@ -69,7 +69,7 @@ PatchChosenCrossAndCrossUsedFlag:
 	ldrb r0, [r1,r0]
 	add	r0, r0, r4
 	mov	r1, 0x0
-	ldr	r3, =0x8015953
+	ldr	r3, =sub_8015952|1
 	mov	lr, pc
 	bx r3
 	sub	r0, r0, r4
@@ -98,13 +98,13 @@ PatchResultingBeastForm:
 
 PatchCountRemainingCrosses:
 	bl CheckCrossUsedUp
-	ldr	r1,=0x8029EE9+VERSION*2
+	ldr	r1, =PatchCountRemainingCrosses_Return|1
 	bx r1
 
 PatchActiveCrossList:
-	ldr	r3,=0x20349A0
+	ldr	r3, =0x20349A0
 	bl CheckCrossUsedUp
-	ldr	r1,=0x8029F17+VERSION*4
+	ldr	r1, =PatchActiveCrossList_Return|1
 	bx r1
 
 CheckCrossUsedUp:
@@ -134,7 +134,7 @@ PatchCrossWindowGfxPtr:
 	ldr r1, =0x240 // cross window size
 	mul r0, r1
 	add r0, r2, r0
-	ldr	r1, =0x8029DAD
+	ldr	r1, =PatchCrossWindowGfxPtr_Return|1
 	bx r1
 
 PatchCrossSelectedPalette:
@@ -154,7 +154,7 @@ PatchCrossSelectedPalette:
 	mul r0, r1
 	add r0, r3, r0
 	pop {r3}
-	ldr	r1, =0x8029EB7
+	ldr	r1, =PatchCrossSelectedPalette_Return|1
 	bx r1
 
 // 0x20352cc chosen cross?
@@ -257,7 +257,7 @@ PatchEmotionMugGfx:
 	// get emotion mug palette pointer
 	lsl r4, r4, 5
 	add r4, r3, r4
-	ldr r1, =0x801cbc8|1
+	ldr r1, =PatchEmotionMugGfx_Return|1
 	bx r1
 
 PatchGetCrossDescription:
@@ -269,42 +269,42 @@ PatchGetCrossDescription:
 	ldrb r1, [r1,r0]
 	sub	r1, 1
 	pop	{r0}
-	ldr	r2, =0x8028B55
+	ldr	r2, =PatchGetCrossDescription_Return|1
 	bx r2
 
 PatchLoadBeastIcon:
 	push lr
 	mov	r2, 0
 	bl getbst
-	ldr	r2, =0x80282B3
+	ldr	r2, =PatchLoadBeastIcon_Return|1
 	bx r2
 
 PatchLoadBeastChipImage:
 	mov	r2, 4
 	bl getbst
 	ldr	r1, =0x6009560
-	ldr	r2, =0x8028727
+	ldr	r2, =PatchLoadBeastChipImage_Return|1
 	bx r2
 
 PatchLoadBeastChipPalette:
 	mov	r2, 8
 	bl getbst
 	add	r0, r0, r1
-	ldr	r1, =0x802873D
+	ldr	r1, =PatchLoadBeastChipPalette_Return|1
 	bx r1
 
 PatchPlayBeastSoundEffect:
 	mov	r2, pc
 	add	r2, 7h
 	mov	lr, r2
-	ldr	r2, =0x80302B7
+	ldr	r2, =sub_80302B6|1
 	bx r2
 	mov	r2, 0x0C
 	bl getbst
-	ldr	r1, =0x80005CD
+	ldr	r1, =PlaySoundEffect|1
 	mov	lr, pc
 	bx r1
-	ldr	r0, =0x802776B
+	ldr	r0, =PatchPlayBeastSoundEffect_Return|1
 	bx r0
 
 getbst: // input: r2 = pointer number * 4, output: r0 = beastbutton
@@ -400,14 +400,13 @@ NullBeastEmotionMug:
 BeastOverEmotionMug:
 	import_mug 17
 	
-	.org 0x0802A086 + VERSION * 4
-Hook_OverrideCrossChosenInMenu:
+	.org Hook_OverrideCrossChosenInMenu
 	ldr	r6, =OverrideCrossChosenInMenu|1
 	mov	lr, pc
 	bx r6
 
 // free space for hook
-	.org 0x0802A0DC + VERSION * 4
+	.org HookPool_OverrideCrossChosenInMenu
 	.pool
 
 // sub_802937A - set cross used flag, also set some other stuff?
