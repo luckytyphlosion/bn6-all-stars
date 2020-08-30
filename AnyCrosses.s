@@ -9,6 +9,8 @@ FALZAR equ 1
 
 	.gba
 	.include ver
+	.include "macros.inc"
+	.include "constants.inc"
 
 	.definelabel eCustScreenMenu, 0x20364c0
 	.definelabel GetBattleNaviStatsAddr, 0x8013682
@@ -399,7 +401,9 @@ NullBeastEmotionMug:
 
 BeastOverEmotionMug:
 	import_mug 17
-	
+
+	.include "cutscene.s"
+
 	.org Hook_OverrideCrossChosenInMenu
 	ldr	r6, =OverrideCrossChosenInMenu|1
 	mov	lr, pc
@@ -500,6 +504,9 @@ BeastOverEmotionMug:
 	bx r2
 	.org 0x08027764
 	.pool
+
+	.org L_BUTTON_CUTSCENE_SCRIPT_ADDR
+	cs_jump PatchLButtonCutsceneScript
 
 	.close
 // eof

@@ -1,4 +1,5 @@
-tools/armips.exe
+*.exe
+*.dll
 *.gba
 *.sna
 *.sa*
@@ -6,3 +7,4 @@ tools/armips.exe
 *.zip
 *.sym
 *.txt
+*.msg

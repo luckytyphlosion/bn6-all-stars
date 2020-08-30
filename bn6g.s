@@ -45,3 +45,5 @@ VERSION            equ GREGAR // 0 = Gregar, 1 = Falzar
 
 	.definelabel Hook_OverrideCrossChosenInMenu, 0x802A086
 	.definelabel HookPool_OverrideCrossChosenInMenu, 0x0802A0DC
+
+	.definelabel L_BUTTON_CUTSCENE_SCRIPT_ADDR, 0x809a72c

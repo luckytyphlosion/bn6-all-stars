@@ -1,0 +1,71 @@
+
+	// has to be defined separately from gfx_anim_data_struct because the "start" command definition only specifies up to Param3
+	.macro gfx_anim_data_common_struct, param0, param1, command, index, param2, param3
+	.word param0
+	.word param1
+	.byte command
+	.byte index
+	.byte param2
+	.byte param3
+	.endmacro
+
+	.definelabel GFX_ANIM_PAL_COPY, 0x00
+	.macro gfx_anim_pal_copy, dest, size, index
+	gfx_anim_data_common_struct dest, size, GFX_ANIM_PAL_COPY, index, 0xff, 0xff
+	.endmacro
+
+	.definelabel GFX_ANIM_4BIT_TILE_COPY, 0x04
+	.macro gfx_anim_4bit_tile_copy, gfx_src, gfx_dest, index, num_tiles, buffer_index
+	gfx_anim_data_common_struct gfx_src, gfx_dest, GFX_ANIM_4BIT_TILE_COPY, index, num_tiles, buffer_index
+	.endmacro
+
+	.definelabel GFX_ANIM_UNK_08, 0x08
+	// no macro until I can find ROM data which uses this command
+
+	.definelabel GFX_ANIM_MANUAL_PAL_TRANSFORM, 0x0c
+	.macro gfx_anim_manual_pal_transform, transform_type, dest, index, num_pals
+	gfx_anim_data_common_struct transform_type, dest, GFX_ANIM_MANUAL_PAL_TRANSFORM, index, num_pals, 0xff
+	.endmacro
+
+	.definelabel GFX_ANIM_PLAY_SOUND, 0x10
+	// haven't actually seen an instance of this command, guessing values
+	.macro gfx_anim_play_sound, index
+	gfx_anim_data_common_struct 0xffffffff, 0xffffffff, GFX_ANIM_PLAY_SOUND, index, 0xff, 0xff
+	.endmacro
+
+	.definelabel GFX_ANIM_MODIFY_EVENT_FLAGS, 0x14
+	// haven't actually seen an instance of this command, guessing values
+	.macro gfx_anim_modify_event_flags, index
+	gfx_anim_data_common_struct 0xffffffff, 0xffffffff, GFX_ANIM_MODIFY_EVENT_FLAGS, index, 0xff, 0xff
+	.endmacro
+
+	.definelabel GFX_ANIM_8BIT_TILE_COPY, 0x18
+	.macro gfx_anim_8bit_tile_copy, gfx_src, gfx_dest, index, num_tiles, buffer_index
+	gfx_anim_data_common_struct gfx_src, gfx_dest, GFX_ANIM_8BIT_TILE_COPY, index, num_tiles, buffer_index
+	.endmacro
+
+// data commands
+
+	.definelabel GFX_ANIM_END, 0x0
+	// ends a gfx anim
+	.macro gfx_anim_end
+	.word GFX_ANIM_END
+	.endmacro
+
+	.definelabel GFX_ANIM_LOOP, 0x1
+	// jumps to the loop address, which is by default the first gfx_anim_data command executed
+	.macro gfx_anim_loop
+	.word GFX_ANIM_LOOP
+	.endmacro
+
+	.definelabel GFX_ANIM_JUMP, 0x2
+	// sets the loop address to the given address and jumps to it
+	.macro gfx_anim_jump, dest
+	.word GFX_ANIM_JUMP
+	.word dest
+	.endmacro
+
+	// generic command to specify data for a gfx anim after the initial command has been executed
+	.macro gfx_anim_data, data, delay
+	.word data, delay
+	.endmacro
