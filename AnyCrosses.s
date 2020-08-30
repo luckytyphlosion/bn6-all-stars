@@ -10,13 +10,10 @@ FALZAR equ 1
 	.gba
 	.include ver
 
-NCPeffect   equ 0
-set2flag    equ 0
-
 	.definelabel eCustScreenMenu, 0x20364c0
 	.definelabel GetBattleNaviStatsAddr, 0x8013682
 
-	.open INPUT_ROM, "bn6f-all-stars.gba", 0x8000000
+	.open INPUT_ROM, OUTPUT_ROM, 0x8000000
 
 	.org fspace
 
@@ -26,6 +23,13 @@ set2flag    equ 0
 // spoutbeast, tomahawkbeast, tengubeast, groundbeast, dustbeast
 // falzarbeast, full synchro falzarbeast, falzarbeast over
 
+// eEventFlags - 2001c88
+// eFolders - 2002178
+// 0x4f0 bytes
+// 0x2780 flags
+
+// free save space: 2003f40
+
 // 2036510 - active crosses
 // sub_8029EF8 - initializes active cross list
 
@@ -33,20 +37,23 @@ set2flag    equ 0
 // 86e73d0 - gregar cross window palettes
 
 // 30016d0 - mugshot palette
-	.align 2
+	.align 4
 crosses:
 	// Cross1,Cross2,Cross3,Cross4,Cross5,Beast
-	.byte 0x01,0x06,0x03,0x04,0x05,0x0C
-	.byte 0x06,0x07,0x08,0x09,0x0A,0x0C
+	.byte 0x01,0x06,0x03,0x04,0x05
+	.if VERSION == GREGAR
+	.byte 0x0b
+	.else
+	.byte 0x0c
+	.endif
 
-	.align 2
+	.align 4
 
 beastbutton:
 	// Button graphics, Chip Image, Chip Palette, Sound Effect
-	.word 0x086E79CC, 0x08723034, 0x08725814, 0x193
-	.word 0x086E79CC, 0x08723034, 0x08725814, 0x193
+	.word BeastButtonGfxPtr, BeastChipImageGfxPtr, BeastChipPalettePtr, THIS_VERSION_BEAST_SFX
 
-	.align 2
+	.align 4
 OverrideCrossChosenInMenu:
 	push r5
 	push lr
@@ -228,8 +235,8 @@ PatchEmotionMugGfx:
 	cmp r2, 18 // [heatbeast, chargebeast]
 	blt @@gotVersion
 
-	cmp r2, 23 // [spoutbeast, dustbeast]
 	mov r1, FALZAR
+	cmp r2, 23 // [spoutbeast, dustbeast]
 	blt @@gotVersion
 
 	cmp r2, 24 // falzar beastover
@@ -300,21 +307,9 @@ PatchPlayBeastSoundEffect:
 	ldr	r0, =0x802776B
 	bx r0
 
-getptr:	 // input: r3 = pointer list start, output: r0 = required pointer
-	push {r0,r1,r3,lr}
-	mov r0, 0 // bl GetCrossList
-	lsl	r0, r0, 2
-	ldr	r3, [r3,r0]
-	pop	{r0,r1}
-	add	r0, r0, r3
-	pop	{r3,pc}
-
 getbst: // input: r2 = pointer number * 4, output: r0 = beastbutton
 	push {r1,lr}
-	mov r0, 0 // bl GetCrossList
-	lsl	r0, r0, 4
-	ldr	r1, =beastbutton
-	add	r0, r1, r0
+	ldr	r0, =beastbutton
 	ldr	r0, [r0,r2]
 	pop	{r1,pc}
 
@@ -323,11 +318,11 @@ GetCrossList: // output: r0 = set value, r1 = set offset
 	bx lr
 	.pool
 
-	.align 2
+	.align 4
 OppositeVersionCrossWindows:
 	.import OTHER_VERSION_ROM, OTHER_VERSION_CROSS_WINDOWS_FILE_ADDR, 0x240 * 10
 
-	.align 2
+	.align 4
 OppositeVersionCrossWindowPalettes:
 	.import OTHER_VERSION_ROM, OTHER_VERSION_CROSS_WINDOW_PALETTES_FILE_ADDR, 0x20 * 10
 
@@ -339,7 +334,7 @@ OppositeVersionCrossWindowPalettes:
 	.import OTHER_VERSION_ROM, readu32(OTHER_VERSION_ROM, OTHER_VERSION_EMOTION_MUG_POINTER_TABLE_ADDR + (index + 5) * 4) - 0x8000000, 0x100
 	.endmacro
 
-	.align 2
+	.align 4
 OppositeVersionEmotionMugsPointerTable:
 	import_mug_ptr 0
 	import_mug_ptr 1
@@ -368,7 +363,7 @@ OppositeVersionEmotionMugsPointerTable:
 OppositeVersionEmotionMugPalettes:
 	.import OTHER_VERSION_ROM, OTHER_VERSION_EMOTION_MUG_PALETTES_ADDR, 0x20 * 23
 
-	.align 2
+	.align 4
 Cross1EmotionMug:
 	import_mug 0
 
