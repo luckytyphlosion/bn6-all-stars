@@ -37,7 +37,7 @@ VERSION            equ GREGAR // 0 = Gregar, 1 = Falzar
 	.definelabel PatchCrossWindowGfxPtr_Return, 0x8029dac
 	.definelabel PatchCrossSelectedPalette_Return, 0x8029EB6
 	.definelabel PatchEmotionMugGfx_Return, 0x801cbc8
-	.definelabel PatchGetCrossDescription_Return, 0x8028B54
+	.definelabel PatchGetCrossDescription_Return, 0x8028B52
 	.definelabel PatchLoadBeastIcon_Return, 0x80282B2
 	.definelabel PatchLoadBeastChipImage_Return, 0x8028726
 	.definelabel PatchLoadBeastChipPalette_Return, 0x802873C
@@ -49,3 +49,7 @@ VERSION            equ GREGAR // 0 = Gregar, 1 = Falzar
 	.definelabel HookPool_OverrideCrossChosenInMenu, 0x0802A0DC
 
 	.definelabel L_BUTTON_CUTSCENE_SCRIPT_ADDR, 0x809a72c
+
+	.definelabel SHUFFLE_FOLDER_SLICE_ADDR, 0x8000d12
+
+	.definelabel CrossDescriptionTextArchive, 0x86ed458

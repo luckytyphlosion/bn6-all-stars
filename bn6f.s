@@ -50,3 +50,6 @@ VERSION            equ FALZAR // 0 = Gregar, 1 = Falzar
 
 	.definelabel L_BUTTON_CUTSCENE_SCRIPT_ADDR, 0x80991f4
 
+	.definelabel SHUFFLE_FOLDER_SLICE_ADDR, 0x8000d12
+
+	.definelabel CrossDescriptionTextArchive, 0x86ef4d4

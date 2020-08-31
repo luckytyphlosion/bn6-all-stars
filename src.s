@@ -19,7 +19,7 @@ FALZAR equ 1
 	.definelabel GetBattleNaviStatsAddr, 0x8013682
 	.definelabel CopyBytes, 0x8000920
 	.definelabel eCrossList, 0x2003f40
-
+	.definelabel GetPositiveSignedRNG1, 0x8001562
 	.open INPUT_ROM, OUTPUT_ROM, 0x8000000
 
 	.org fspace
@@ -266,14 +266,14 @@ PatchEmotionMugGfx:
 	bx r1
 
 PatchGetCrossDescription:
-	push {r0}
 	bl GetCrossList
 	ldrb r0, [r5,0x1b]
+	mov r2, 0x50
 	add	r2, r2, r0
 	ldrb r0, [r5,r2]
 	ldrb r1, [r1,r0]
 	sub	r1, 1
-	pop	{r0}
+	ldr r0, =CrossDescriptionTextArchive
 	ldr	r2, =PatchGetCrossDescription_Return|1
 	bx r2
 
@@ -484,8 +484,7 @@ BeastOverEmotionMug:
 	mov r0, r4
 
 // sub_8028A78
-	.org 0x08028B4A
-	ldr	r2, [0x8028B6C]
+	.org 0x08028B48
 	ldr	r1, =PatchGetCrossDescription|1
 	bx r1
 	.pool
@@ -517,6 +516,29 @@ BeastOverEmotionMug:
 
 	.org L_BUTTON_CUTSCENE_SCRIPT_ADDR
 	cs_jump PatchLButtonCutsceneScript
+
+	.org SHUFFLE_FOLDER_SLICE_ADDR
+ShuffleFolderSlice:
+	push {r4-r6,lr}
+	sub r4, r1, 1
+	beq @@done
+@@loop:
+	push {r0}
+	bl GetPositiveSignedRNG1
+	add r1, r4, 1
+	swi 6 // r1 = rand() % (r1 + 1)
+	pop {r0}
+
+	add r1, r1, r1
+	add r3, r4, r4
+	ldrh r5, [r0,r1]
+	ldrh r6, [r0,r3]
+	strh r6, [r0,r1]
+	strh r5, [r0,r3]
+	sub r4, 1
+	bne @@loop
+@@done:
+	pop {r4-r6,pc}
 
 	.close
 // eof
