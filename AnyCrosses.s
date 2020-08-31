@@ -14,6 +14,8 @@ FALZAR equ 1
 
 	.definelabel eCustScreenMenu, 0x20364c0
 	.definelabel GetBattleNaviStatsAddr, 0x8013682
+	.definelabel CopyBytes, 0x8000920
+	.definelabel eCrossList, 0x2003f40
 
 	.open INPUT_ROM, OUTPUT_ROM, 0x8000000
 
@@ -40,13 +42,12 @@ FALZAR equ 1
 
 // 30016d0 - mugshot palette
 	.align 4
-crosses:
+DefaultCrossList:
 	// Cross1,Cross2,Cross3,Cross4,Cross5,Beast
-	.byte 0x01,0x06,0x03,0x04,0x05
 	.if VERSION == GREGAR
-	.byte 0x0b
+	.byte 0x01, 0x02, 0x03, 0x04, 0x05
 	.else
-	.byte 0x0c
+	.byte 0x06, 0x07, 0x08, 0x09, 0x0a
 	.endif
 
 	.align 4
@@ -92,8 +93,7 @@ PatchResultingBeastForm:
 	mov	r4, 0xc
 
 @@isNullBeast:
-	bl GetCrossList
-	ldrb r0, [r1,0x5]
+	mov r0, THIS_VERSION_BEAST
 	add	r4, r0, r4
 @@isCrossBeast:
 	pop	pc
@@ -315,8 +315,15 @@ getbst: // input: r2 = pointer number * 4, output: r0 = beastbutton
 	ldr	r0, [r0,r2]
 	pop	{r1,pc}
 
-GetCrossList: // output: r0 = set value, r1 = set offset
-	ldr	r1, =crosses
+GetCrossList:
+	push {r0}
+	ldr	r1, =eCrossList
+	ldrb r0, [r1,0]
+	cmp r0, 0
+	bne @@crossListInitialized
+	ldr r1, =DefaultCrossList
+@@crossListInitialized:
+	pop {r0}
 	bx lr
 	.pool
 
