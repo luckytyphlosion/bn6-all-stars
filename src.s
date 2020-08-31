@@ -4,6 +4,9 @@
 // By Prof. 9
 // Made for ARMIPS assembler v0.7c
 
+// Modified into the MMBN6 All Stars patch
+// https://i.imgur.com/yIfsan8.png
+
 GREGAR equ 0
 FALZAR equ 1
 
