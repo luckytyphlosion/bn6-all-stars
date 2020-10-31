@@ -7,6 +7,10 @@
 // Modified into the MMBN6 All Stars patch
 // https://i.imgur.com/yIfsan8.png
 
+// 0 = decross only removes cross, keeps you in same beast
+// 1 = decross always sets beast to your version beast
+OPT_DECROSS_INTO_VERSION_BEAST equ 1
+
 GREGAR equ 0
 FALZAR equ 1
 
@@ -513,6 +517,14 @@ BeastOverEmotionMug:
 	bx r2
 	.org 0x08027764
 	.pool
+
+// sub_8015766 - decross controller
+.if OPT_DECROSS_INTO_VERSION_BEAST
+	.org 0x08015802
+	mov	r1,THIS_VERSION_BEAST
+	.org 0x08015808
+	mov	r1,THIS_VERSION_BEAST
+.endif
 
 	.org L_BUTTON_CUTSCENE_SCRIPT_ADDR
 	cs_jump PatchLButtonCutsceneScript
