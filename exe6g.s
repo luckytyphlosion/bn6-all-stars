@@ -5,18 +5,18 @@ OUTPUT_ROM         equ "bn6g-all-stars.gba"
 
 IS_US equ 1
 
-GregarVersionCrossWindows equ 0x86E5D50
+GregarVersionCrossWindows equ 0x8708774
 FalzarVersionCrossWindows equ OppositeVersionCrossWindows
 
-GregarVersionCrossWindowPalettes equ 0x86e73d0
+GregarVersionCrossWindowPalettes equ 0x86e73d0 // todo
 FalzarVersionCrossWindowPalettes equ OppositeVersionCrossWindowPalettes
 
-GregarVersionEmotionMugsPointerTable equ 0x801cd08
+GregarVersionEmotionMugsPointerTable equ 0x801d1c8
 FalzarVersionEmotionMugsPointerTable equ OppositeVersionEmotionMugsPointerTable
 
-GregarVersionEmotionMugPalettes equ 0x872d050
+GregarVersionEmotionMugPalettes equ 0x8708374
 FalzarVersionEmotionMugPalettes equ OppositeVersionEmotionMugPalettes
-
+// todo
 BeastButtonGfxPtr equ 0x86e5950
 BeastChipImageGfxPtr equ 0x8720f70
 BeastChipPalettePtr equ 0x8723750
