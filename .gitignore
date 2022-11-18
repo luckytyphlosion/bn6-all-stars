@@ -8,3 +8,5 @@
 *.sym
 *.txt
 *.msg
+!bn6f_nogba.sym
+!tools/*
