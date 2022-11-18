@@ -2,6 +2,7 @@
 OTHER_VERSION_ROM  equ "bn6f.gba"
 
 IS_US equ 1
+TL_PATCH equ 0
 
 GregarVersionCrossWindows equ 0x86E5D50
 FalzarVersionCrossWindows equ OppositeVersionCrossWindows
@@ -27,7 +28,6 @@ OTHER_VERSION_EMOTION_MUG_PALETTES_ADDR equ 0x72f114
 
 THIS_VERSION_BEAST equ 0xb
 
-fspace             equ 0x087FE36C
 VERSION            equ GREGAR // 0 = Gregar, 1 = Falzar
 
 // hooks

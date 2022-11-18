@@ -16,6 +16,8 @@ tools/armips.exe build.asm -sym bn6f-all-stars-temp.sym -strequ ver "bn6f.s"
 tools/armips.exe build.asm -sym bn6g-all-stars-temp.sym -strequ ver "bn6g.s"
 tools/armips.exe build.asm -sym exe6f-all-stars-temp.sym -strequ ver "exe6f.s" -equ TL_PATCH 0
 tools/armips.exe build.asm -sym exe6g-all-stars-temp.sym -strequ ver "exe6g.s" -equ TL_PATCH 0
+tools/armips.exe build.asm -sym exe6f_us-all-stars-temp.sym -strequ ver "exe6f.s" -equ TL_PATCH 1
+tools/armips.exe build.asm -sym exe6g_us-all-stars-temp.sym -strequ ver "exe6g.s" -equ TL_PATCH 1
 
 if [[ $? -ne 0 ]] ; then
     exit 1
@@ -25,5 +27,7 @@ head -c -1 bn6f-all-stars-temp.sym | cat - bn6f_nogba.sym > bn6f-all-stars.sym
 head -c -1 bn6g-all-stars-temp.sym | cat - bn6f_nogba.sym > bn6g-all-stars.sym
 head -c -1 exe6f-all-stars-temp.sym | cat - constants_ewram.sym > exe6f-all-stars.sym
 head -c -1 exe6g-all-stars-temp.sym | cat - constants_ewram.sym > exe6g-all-stars.sym
+head -c -1 exe6f_us-all-stars-temp.sym | cat - constants_ewram.sym > exe6f_us-all-stars.sym
+head -c -1 exe6g_us-all-stars-temp.sym | cat - constants_ewram.sym > exe6g_us-all-stars.sym
 
-rm bn6f-all-stars-temp.sym bn6g-all-stars-temp.sym
+rm bn6f-all-stars-temp.sym bn6g-all-stars-temp.sym exe6f-all-stars-temp.sym exe6g-all-stars-temp.sym

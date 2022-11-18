@@ -1,5 +1,9 @@
 
-OTHER_VERSION_ROM  equ "exe6f.gba"
+	.if TL_PATCH == 1
+		OTHER_VERSION_ROM equ "exe6f_us.gba"
+	.else
+		OTHER_VERSION_ROM equ "exe6f.gba"
+	.endif
 
 IS_US equ 0
 
@@ -20,7 +24,12 @@ BeastChipImageGfxPtr equ 0x874550c
 BeastChipPalettePtr equ 0x8747e8c
 THIS_VERSION_BEAST_SFX equ 0x191
 
-OTHER_VERSION_CROSS_WINDOWS_FILE_ADDR equ 0x70A814
+	.if TL_PATCH == 1
+		OTHER_VERSION_CROSS_WINDOWS_FILE_ADDR equ 0x810208
+	.else
+		OTHER_VERSION_CROSS_WINDOWS_FILE_ADDR equ 0x70A814
+	.endif
+
 OTHER_VERSION_CROSS_WINDOW_PALETTES_FILE_ADDR equ 0x70BE94
 OTHER_VERSION_EMOTION_MUG_POINTER_TABLE_ADDR equ 0x1d12c
 OTHER_VERSION_EMOTION_MUG_PALETTES_ADDR equ 0x753858
@@ -52,4 +61,8 @@ VERSION            equ GREGAR // 0 = Gregar, 1 = Falzar
 
 	.definelabel SHUFFLE_FOLDER_SLICE_ADDR, 0x8000d12
 
-	.definelabel CrossDescriptionTextArchive, 0x8710064
+	.if TL_PATCH == 1
+		.definelabel CrossDescriptionTextArchive, 0x883d70c
+	.else
+		.definelabel CrossDescriptionTextArchive, 0x8710064
+	.endif

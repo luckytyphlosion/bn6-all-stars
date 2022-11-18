@@ -1,10 +1,19 @@
 
-OTHER_VERSION_ROM  equ "exe6g.gba"
+	.if TL_PATCH == 1
+		OTHER_VERSION_ROM equ "exe6g_us.gba"
+	.else
+		OTHER_VERSION_ROM equ "exe6g.gba"
+	.endif
 
 IS_US equ 0
 
 GregarVersionCrossWindows equ OppositeVersionCrossWindows
-FalzarVersionCrossWindows equ 0x870A814
+
+	.if TL_PATCH == 1
+		FalzarVersionCrossWindows equ 0x8810208
+	.else
+		FalzarVersionCrossWindows equ 0x870A814
+	.endif
 
 GregarVersionCrossWindowPalettes equ OppositeVersionCrossWindowPalettes
 FalzarVersionCrossWindowPalettes equ 0x870BE94
@@ -51,4 +60,8 @@ VERSION            equ FALZAR // 0 = Gregar, 1 = Falzar
 
 	.definelabel SHUFFLE_FOLDER_SLICE_ADDR, 0x8000d12
 
-	.definelabel CrossDescriptionTextArchive, 0x8712104
+	.if TL_PATCH == 1
+		.definelabel CrossDescriptionTextArchive, 0x8814ec4
+	.else
+		.definelabel CrossDescriptionTextArchive, 0x8712104
+	.endif
