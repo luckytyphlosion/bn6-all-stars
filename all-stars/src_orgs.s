@@ -19,93 +19,93 @@
 
 // sub_802937A - set cross used flag, also set some other stuff?
 // sub_8029EF8 - populate cross list
-	.org 0x0802937C
+	.vorg 0x0802937C, 0x8029790
 	mov	r4, 0
-	.org 0x08029386
+	.vorg 0x08029386, 0x802979a
 	mov	r4, 0xc
 
-	.org 0x08029390
+	.vorg 0x08029390, 0x80297a4
 	ldr	r1, =PatchChosenCrossAndCrossUsedFlag|1
 	mov	lr, pc
 	bx r1
-	b 0x80293A0
+	.vbranch 0x80293A0, 0x80297b4
 	.pool
 
 // sub_8029344
-	.org 0x08029352
+	.vorg 0x08029352, 0x8029766
 	ldr	r4, =PatchResultingBeastForm|1
 	mov	lr, pc
 	bx r4
-	b 0x8029368
+	.vbranch 0x8029368, 0x802977c
 	.pool
 
 // sub_8029EC8
-	.org 0x08029EE0
+	.vorg 0x08029EE0, 0x0802A2F4
 	ldr	r0, =PatchCountRemainingCrosses|1
 	bx r0
 	.pool
 
 // sub_8029EF8
-	.org 0x08029F0C + VERSION * 2
+	.vorg 0x08029F0C + VERSION * 2, 0x802a320 + VERSION * 2
 	ldr	r0, =PatchActiveCrossList|1
 	bx r0
 	.pool
 
 // sub_8029D94
-	.org 0x08029DA2
+	.vorg 0x08029DA2, 0x802a1b6
 	ldr	r1, =PatchCrossWindowGfxPtr|1
 	bx r1
-	.org 0x08029DD8
+	.vorg 0x08029DD8, 0x802a1ec
 	.pool
 
 // sub_8029EAC
-	.org 0x08029EAE
+	.vorg 0x08029EAE, 0x802a2c2
 	ldr	r1, =PatchCrossSelectedPalette|1
 	bx r1
-	.org 0x08029EC0
+	.vorg 0x08029EC0, 0x802a2d4
 	.pool
 
 // sub_801CB38
-	.org 0x801CBBE
+	.vorg 0x801CBBE, 0x801cfe2
 	ldr r2, =PatchEmotionMugGfx|1
 	bx r2
 	.pool
 
 // sub_801CB38
-	.org 0x801CC24
+	.vorg 0x801CC24, 0x801d048
 	nop
 	nop
 	mov r0, r4
 
 // sub_8028A78
-	.org 0x08028B48
+	.vorg 0x08028B48, 0x8028f5c
 	ldr	r1, =PatchGetCrossDescription|1
 	bx r1
 	.pool
 
 // sub_80282AE (called from jumptable in sub_8028250)
-	.org 0x08028378
+	.vorg 0x08028378, 0x802878c
 	.word PatchLoadBeastIcon|1b
 
 // sub_802871C
-	.org 0x08028722
+	.vorg 0x08028722, 0x8028b36
 	ldr	r0, =PatchLoadBeastChipImage|1
 	bx r0
-	.org 0x0802874C
+	.vorg 0x0802874C, 0x8028b60
 	.pool
 
 // sub_802871C
-	.org 0x08028738
+	.vorg 0x08028738, 0x8028b4c
 	ldr	r0, =PatchLoadBeastChipPalette|1
 	bx r0
-	.org 0x08028750
+	.vorg 0x08028750, 0x8028b64
 	.pool
 
 // sub_802774C
-	.org 0x0802775E
+	.vorg 0x0802775E, 0x8027b72
 	ldr	r2,=PatchPlayBeastSoundEffect|1
 	bx r2
-	.org 0x08027764
+	.vorg 0x08027764, 0x8027b78
 	.pool
 
 	.org L_BUTTON_CUTSCENE_SCRIPT_ADDR

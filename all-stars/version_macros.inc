@@ -14,3 +14,11 @@
 			.org jp_offset
 		.endif
 	.endmacro
+
+	.macro .vbranch, us_offset, jp_offset
+		.if IS_US == 1
+			b us_offset
+		.else
+			b jp_offset
+		.endif
+	.endmacro

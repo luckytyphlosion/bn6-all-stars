@@ -1,4 +1,5 @@
 
+	.align 2, 0
 Hook_DoHiveCheckFirst:
 	push r4,r6,r7,lr
 	ldr r4, [r5, 0x54]

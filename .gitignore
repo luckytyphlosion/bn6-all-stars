@@ -10,3 +10,4 @@
 *.msg
 !bn6f_nogba.sym
 !tools/*
+!constants_ewram.sym

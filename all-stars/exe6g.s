@@ -1,57 +1,55 @@
 
-INPUT_ROM          equ "bn6g.gba"
-OTHER_VERSION_ROM  equ "bn6f.gba"
-OUTPUT_ROM         equ "bn6g-all-stars.gba"
+OTHER_VERSION_ROM  equ "exe6f.gba"
 
 IS_US equ 0
 
 GregarVersionCrossWindows equ 0x8708774
 FalzarVersionCrossWindows equ OppositeVersionCrossWindows
 
-GregarVersionCrossWindowPalettes equ 0x86e73d0 // todo
+GregarVersionCrossWindowPalettes equ 0x8709df4
 FalzarVersionCrossWindowPalettes equ OppositeVersionCrossWindowPalettes
 
-GregarVersionEmotionMugsPointerTable equ 0x801d1c8
+GregarVersionEmotionMugsPointerTable equ 0x801d12c
 FalzarVersionEmotionMugsPointerTable equ OppositeVersionEmotionMugsPointerTable
 
-GregarVersionEmotionMugPalettes equ 0x8708374
+GregarVersionEmotionMugPalettes equ 0x875178c
 FalzarVersionEmotionMugPalettes equ OppositeVersionEmotionMugPalettes
-// todo
-BeastButtonGfxPtr equ 0x86e5950
-BeastChipImageGfxPtr equ 0x8720f70
-BeastChipPalettePtr equ 0x8723750
+
+BeastButtonGfxPtr equ 0x8708374
+BeastChipImageGfxPtr equ 0x874550c
+BeastChipPalettePtr equ 0x8747e8c
 THIS_VERSION_BEAST_SFX equ 0x191
 
-OTHER_VERSION_CROSS_WINDOWS_FILE_ADDR equ 0x6e7dcc
-OTHER_VERSION_CROSS_WINDOW_PALETTES_FILE_ADDR equ 0x6e944c
-OTHER_VERSION_EMOTION_MUG_POINTER_TABLE_ADDR equ 0x1cd08
-OTHER_VERSION_EMOTION_MUG_PALETTES_ADDR equ 0x72f114
+OTHER_VERSION_CROSS_WINDOWS_FILE_ADDR equ 0x70A814
+OTHER_VERSION_CROSS_WINDOW_PALETTES_FILE_ADDR equ 0x70BE94
+OTHER_VERSION_EMOTION_MUG_POINTER_TABLE_ADDR equ 0x1d12c
+OTHER_VERSION_EMOTION_MUG_PALETTES_ADDR equ 0x753858
 
 THIS_VERSION_BEAST equ 0xb
 
-fspace             equ 0x087FE36C
 VERSION            equ GREGAR // 0 = Gregar, 1 = Falzar
 
 // hooks
-	.definelabel sub_8015952, 0x8015952
-	.definelabel PatchCountRemainingCrosses_Return, 0x8029ee8
-	.definelabel PatchActiveCrossList_Return, 0x8029f16
-	.definelabel PatchCrossWindowGfxPtr_Return, 0x8029dac
-	.definelabel PatchCrossSelectedPalette_Return, 0x8029EB6
-	.definelabel PatchEmotionMugGfx_Return, 0x801cbc8
-	.definelabel PatchGetCrossDescription_Return, 0x8028B52
-	.definelabel PatchLoadBeastIcon_Return, 0x80282B2
-	.definelabel PatchLoadBeastChipImage_Return, 0x8028726
-	.definelabel PatchLoadBeastChipPalette_Return, 0x802873C
-	.definelabel sub_80302B6, 0x80302B6
+	.definelabel sub_8015952, 0x8015f52
+	.definelabel PatchCountRemainingCrosses_Return, 0x802a2fc
+	.definelabel PatchActiveCrossList_Return, 0x802a32a
+	.definelabel PatchCrossWindowGfxPtr_Return, 0x802a1c0
+	.definelabel PatchCrossSelectedPalette_Return, 0x802a2ca
+	.definelabel PatchEmotionMugGfx_Return, 0x801cfec
+	.definelabel PatchGetCrossDescription_Return, 0x8028f66
+	.definelabel PatchLoadBeastIcon_Return, 0x80286c6
+	.definelabel PatchLoadBeastChipImage_Return, 0x8028b3a
+	.definelabel PatchLoadBeastChipPalette_Return, 0x8028b50
+	.definelabel sub_80302B6, 0x8031272
 	.definelabel PlaySoundEffect, 0x80005CC
-	.definelabel PatchPlayBeastSoundEffect_Return, 0x802776A
+	.definelabel PatchPlayBeastSoundEffect_Return, 0x8027B7E
 
-	.definelabel Hook_OverrideCrossChosenInMenu, 0x802A086
-	.definelabel HookPool_OverrideCrossChosenInMenu, 0x0802A0DC
+	.definelabel Hook_OverrideCrossChosenInMenu, 0x802A49A
 
-	.definelabel L_BUTTON_CUTSCENE_SCRIPT_ADDR, 0x809a72c
+	.definelabel HookPool_OverrideCrossChosenInMenu, 0x0802a4f0
+
+	.definelabel L_BUTTON_CUTSCENE_SCRIPT_ADDR, 0x809cca0
 
 	.definelabel SHUFFLE_FOLDER_SLICE_ADDR, 0x8000d12
 
-	.definelabel CrossDescriptionTextArchive, 0x86ed458
+	.definelabel CrossDescriptionTextArchive, 0x8710064

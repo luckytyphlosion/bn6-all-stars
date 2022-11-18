@@ -74,5 +74,9 @@ WriteCrossesToCrossList:
 
 	.align 4, 0
 ChooseCrossesTextScript:
-	.import "temp/ChooseCrossesTextScript.msg"
+	.if IS_US == 1
+		.import "temp/ChooseCrossesTextScript.msg"
+	.else
+		.import "temp/ChooseCrossesTextScript_JP.msg"
+	.endif
 

@@ -1,7 +1,5 @@
 
-INPUT_ROM          equ "bn6f.gba"
 OTHER_VERSION_ROM  equ "bn6g.gba"
-OUTPUT_ROM         equ "bn6f-all-stars.gba"
 
 IS_US equ 1
 
