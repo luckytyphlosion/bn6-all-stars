@@ -1,0 +1,3 @@
+// offset:&%size=pointer,pointer,...
+// & indicates compressed size, % indicates size header
+0x83E8AC:&%0x4BC=0x0456E8
