@@ -8,13 +8,23 @@
 		.endif
 		.definelabel fspace, 0x88fa800
 	.else
-		INPUT_ROM          equ "exe6g.gba"
-		.if IS_MASTERS == 1
+		.if IS_MASTERS == 1 && SOUND_MOD == 1
+			INPUT_ROM equ "exe6g-soundmod-extend.gba"
+			OUTPUT_ROM equ "exe6g-all-stars-masters-soundmod-extend-temp.gba"
+			.definelabel fspace, 0x8843000
+		.elseif IS_MASTERS == 1 && SOUND_MOD == 0
+			INPUT_ROM equ "exe6g.gba"
 			OUTPUT_ROM equ "exe6g-all-stars-masters-temp.gba"
+			.definelabel fspace, 0x87ff4fc
+		.elseif IS_MASTERS == 0 && SOUND_MOD == 1
+			INPUT_ROM equ "exe6g-soundmod-extend.gba"
+			OUTPUT_ROM equ "exe6g-all-stars-soundmod-extend.gba"			
+			.definelabel fspace, 0x8843000
 		.else
-			OUTPUT_ROM equ "exe6g-all-stars-masters.gba"
+			INPUT_ROM equ "exe6g.gba"
+			OUTPUT_ROM equ "exe6g-all-stars.gba"
+			.definelabel fspace, 0x87ff4fc
 		.endif
-		.definelabel fspace, 0x87ff4fc
 	.endif
 
 	.include "all-stars/exe6g.s"
