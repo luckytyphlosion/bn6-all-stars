@@ -1,6 +1,6 @@
 
 	.if TL_PATCH == 1
-		INPUT_ROM          equ "exe6g_us.gba"
+		INPUT_ROM equ "exe6g_us.gba"
 		.if IS_MASTERS == 1
 			OUTPUT_ROM equ "exe6g_us-all-stars-masters-temp.gba"
 		.else

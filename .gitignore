@@ -11,3 +11,5 @@
 !bn6f_nogba.sym
 !tools/*
 !constants_ewram.sym
+out_patch/
+tools/floating/flipscfg.bin

@@ -86,3 +86,51 @@ rm bn6f-all-stars-temp.sym bn6g-all-stars-temp.sym exe6f-all-stars-temp.sym exe6
 	exe6f-all-stars-masters-temp.gba exe6g-all-stars-masters-temp.gba \
 	exe6f_us-all-stars-masters-temp.gba exe6g_us-all-stars-masters-temp.gba \
 	exe6f-all-stars-masters-soundmod-extend-temp.gba exe6g-all-stars-masters-soundmod-extend-temp.gba
+
+# BN6 Standard
+mkdir -p "out_patch/bn6_allstars/v1.1.0"
+./tools/floating/flips.exe -c -b "bn6f.gba" "bn6f-all-stars.gba" "out_patch/bn6_allstars/v1.1.0/BR6J_00.bps"
+./tools/floating/flips.exe -c -b "bn6g.gba" "bn6g-all-stars.gba" "out_patch/bn6_allstars/v1.1.0/BR5J_00.bps"
+touch out_patch/bn6_allstars/info.toml
+
+# EXE6 Unseniors
+mkdir -p "out_patch/exe6_allstars_unseniors/v1.1.0"
+./tools/floating/flips.exe -c -b "exe6f.gba" "exe6f-all-stars.gba" "out_patch/exe6_allstars_unseniors/v1.1.0/BR6J_00.bps"
+./tools/floating/flips.exe -c -b "exe6g.gba" "exe6g-all-stars.gba" "out_patch/exe6_allstars_unseniors/v1.1.0/BR5J_00.bps"
+touch out_patch/exe6_allstars_unseniors/info.toml
+
+# EXE6 TL Unseniors
+mkdir -p "out_patch/exe6_us_allstars_unseniors/v1.1.0"
+./tools/floating/flips.exe -c -b "exe6f.gba" "exe6f_us-all-stars.gba" "out_patch/exe6_us_allstars_unseniors/v1.1.0/BR6J_00.bps"
+./tools/floating/flips.exe -c -b "exe6g.gba" "exe6g_us-all-stars.gba" "out_patch/exe6_us_allstars_unseniors/v1.1.0/BR5J_00.bps"
+touch out_patch/exe6_us_allstars_unseniors/info.toml
+
+# EXE6 Masters
+mkdir -p "out_patch/exe6_allstars_masters/v1.1.0"
+./tools/floating/flips.exe -c -b "exe6f.gba" "exe6f-all-stars-masters.gba" "out_patch/exe6_allstars_masters/v1.1.0/BR6J_00.bps"
+./tools/floating/flips.exe -c -b "exe6g.gba" "exe6g-all-stars-masters.gba" "out_patch/exe6_allstars_masters/v1.1.0/BR5J_00.bps"
+touch out_patch/exe6_allstars_masters/info.toml
+
+# EXE6 TL Masters
+mkdir -p "out_patch/exe6_us_allstars_masters/v1.1.0"
+./tools/floating/flips.exe -c -b "exe6f.gba" "exe6f_us-all-stars-masters.gba" "out_patch/exe6_us_allstars_masters/v1.1.0/BR6J_00.bps"
+./tools/floating/flips.exe -c -b "exe6g.gba" "exe6g_us-all-stars-masters.gba" "out_patch/exe6_us_allstars_masters/v1.1.0/BR5J_00.bps"
+touch out_patch/exe6_us_allstars_masters/info.toml
+
+# BN6 Standard + SoundMod extend
+mkdir -p "out_patch/bn6_allstars_soundmod_extend/v1.1.0"
+./tools/floating/flips.exe -c -b "bn6f.gba" "bn6f-all-stars-soundmod-extend.gba" "out_patch/bn6_allstars_soundmod_extend/v1.1.0/BR6J_00.bps"
+./tools/floating/flips.exe -c -b "bn6g.gba" "bn6g-all-stars-soundmod-extend.gba" "out_patch/bn6_allstars_soundmod_extend/v1.1.0/BR5J_00.bps"
+touch out_patch/bn6_allstars_soundmod_extend/info.toml
+
+# EXE6 Unseniors + SoundMod extend
+mkdir -p "out_patch/exe6_allstars_unseniors_soundmod_extend/v1.1.0"
+./tools/floating/flips.exe -c -b "exe6f.gba" "exe6f-all-stars-soundmod-extend.gba" "out_patch/exe6_allstars_unseniors_soundmod_extend/v1.1.0/BR6J_00.bps"
+./tools/floating/flips.exe -c -b "exe6g.gba" "exe6g-all-stars-soundmod-extend.gba" "out_patch/exe6_allstars_unseniors_soundmod_extend/v1.1.0/BR5J_00.bps"
+touch out_patch/exe6_allstars_unseniors_soundmod_extend/info.toml
+
+# EXE6 Masters + SoundMod extend
+mkdir -p "out_patch/exe6_allstars_masters_soundmod_extend/v1.1.0"
+./tools/floating/flips.exe -c -b "exe6f.gba" "exe6f-all-stars-masters-soundmod-extend.gba" "out_patch/exe6_allstars_masters_soundmod_extend/v1.1.0/BR6J_00.bps"
+./tools/floating/flips.exe -c -b "exe6g.gba" "exe6g-all-stars-masters-soundmod-extend.gba" "out_patch/exe6_allstars_masters_soundmod_extend/v1.1.0/BR5J_00.bps"
+touch out_patch/exe6_allstars_masters_soundmod_extend/info.toml

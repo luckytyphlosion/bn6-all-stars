@@ -211,22 +211,5 @@ WindRWaitStep:
 
 	pop		r15
 
-
-
-
-;	Free Space in the middle of the rom
-	;	(I don't actually know for certain that this space isn't used for something)
-	;	(whenever possible, use expanded space at the end of the rom instead)
-	
-	.org 0x0803D340
-	
-	.area 0x0803DC30 - 0x0803D340
-	
-	;  ============  ;	new routines go here
-	
-	
-	
-	
-	.endarea
 ; end of mid-rom freespace zone
 
